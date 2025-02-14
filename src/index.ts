@@ -2,14 +2,20 @@ import express, { Application, Request, Response } from "express";
 import axios from "axios";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config();
 
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.json());
 app.use(cors());
+
+app.get('*', (req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+  });
 
 // Endpoint to shorten URLs
 app.post("/shorten", async (req: Request, res: Response): Promise<void> => {
